@@ -3,16 +3,19 @@ Setting up the environment
 To use this lib your test class must extend SparkTest class.
 To provide configuration to the standalone test deploy there are 2 ways:
 - Through Annotations:
+- - **appName:** application name
+- - **master:** spark master (choose you or use one provided by MasterTypes.class)</li>
+- - **batchDurationMillis:** virtual duration of the batch in milliseconds</li>
+- - **useManualClock:** use virtual clock in place of the system one (you don't have really to wait for the batch time)</li>
+
+Annotation Example:
+-----------------
     @SparkTestConfig(appName="GenericSparkTest",master="local[2]",batchDurationMillis=1000,useManualClock=true)
-- **appName:** application name
-- **master:** spark master (choose you or use one provided by MasterTypes.class)</li>
-- **batchDurationMillis:** virtual duration of the batch in milliseconds</li>
-- **useManualClock:** use virtual clock in place of the system one (you don't have really to wait for the batch time)</li>
 
 -Through a simple dsl in the constructor class:
 	withMaster(MasterTypes.LOCAL_2_THREADS).withAppName("GenericSparkTest").withBatchDurationMillis(1000).useManualClock();
 
-Setting up the environment
+Setting up the test
 ================
 - ExpectedOutputHandler
 You have to provide a class that implements this interface in order to save the output 

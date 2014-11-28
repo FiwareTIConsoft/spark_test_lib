@@ -17,11 +17,11 @@ import com.tilab.ca.spark_test_lib.streaming.utils.TestStreamUtils;
 
 @SparkTestConfig(appName="GenericSparkTest",master=MasterTypes.LOCAL_2_THREADS,
 				 batchDurationMillis=1000,useManualClock=true)
-public class GenericTests extends SparkTest{
+public class GenericTestCase extends SparkTest{
 
 	private final String RES_PATH;
 	
-	public GenericTests() {
+	public GenericTestCase() {
 		String workingDir = System.getProperty("user.dir");
 		RES_PATH=String.format("%s%ssrc%stest%sresources%s%s%s",
 				workingDir,File.separator,File.separator,
