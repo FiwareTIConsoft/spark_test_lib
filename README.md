@@ -3,7 +3,7 @@ Setting up the environment
 To use this lib your test class must extend SparkTest class.
 To provide configuration to the standalone test deploy there are 2 ways:
 - Through Annotations:
-	@SparkTestConfig(appName="GenericSparkTest",master="local[2]",batchDurationMillis=1000,useManualClock=true)
+    @SparkTestConfig(appName="GenericSparkTest",master="local[2]",batchDurationMillis=1000,useManualClock=true)
 - **appName:** application name
 - **master:** spark master (choose you or use one provided by MasterTypes.class)</li>
 - **batchDurationMillis:** virtual duration of the batch in milliseconds</li>
