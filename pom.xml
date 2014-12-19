@@ -47,5 +47,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<distributionManagement>
+	<repository>
+	  <id>internal.repo</id>
+	  <name>Temporary Testing Repository</name>
+	  <url>${internal-repo-url}</url>
+	</repository>
+	</distributionManagement>
 
 </project>
