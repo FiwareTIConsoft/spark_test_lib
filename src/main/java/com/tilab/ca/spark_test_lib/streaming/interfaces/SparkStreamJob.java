@@ -4,5 +4,5 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
 public interface SparkStreamJob {
 
-	public void execute(JavaStreamingContext jssc);
+	public void execute(JavaStreamingContext jssc,ExpectedOutputHandler eoh);
 }

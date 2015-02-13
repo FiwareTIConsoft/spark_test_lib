@@ -25,14 +25,14 @@ public class GenericBatchTestCase extends SparkBatchTest{
 	
 	@Test
 	public void singleTest(){
-		MyOutputHandler moh=new MyOutputHandler(1);
+		MyOutputHandler mh=new MyOutputHandler(1);
 		$newBatchTest()
-			.expectedOutputHandler(moh)
+			.expectedOutputHandler(mh)
 			.sparkJob(
-					(jsc) -> {
+					(jsc,moh) -> {
 						JavaRDD<String> testRdd=jsc.textFile(RES_PATH+"file_test_1.txt");
 						int count=testRdd.map((str) -> Integer.parseInt(str.split(" ")[2])).reduce((a,b) -> a+b);
-						moh.saveData(count);
+						((MyOutputHandler)moh).saveData(count);
 					}
 			).test(
 				(eoh) ->{
@@ -40,7 +40,7 @@ public class GenericBatchTestCase extends SparkBatchTest{
 					assertEquals(1,outputList.size());
 					assertEquals(5,(int) outputList.get(0));
 				}
-			).executeTest();
+			).executeTest(10000);
 	}
 	
 	

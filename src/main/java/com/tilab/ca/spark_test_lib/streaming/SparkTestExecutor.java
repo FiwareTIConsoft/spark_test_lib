@@ -1,5 +1,8 @@
-package com.tilab.ca.spark_test_lib.streaming.interfaces;
+package com.tilab.ca.spark_test_lib.streaming;
 
+import com.tilab.ca.spark_test_lib.streaming.interfaces.ExpectedOutputHandler;
+import com.tilab.ca.spark_test_lib.streaming.interfaces.SparkStreamJob;
+import com.tilab.ca.spark_test_lib.streaming.interfaces.TestContainer;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.util.ManualClock;
 import org.junit.Assert;
@@ -38,7 +41,7 @@ public class SparkTestExecutor {
 	
 	public void executeTest(int numBatches,int timeoutMillis){
 		System.out.println("Starting test");
-		ssj.execute(jssc);
+		ssj.execute(jssc,eoh);
 		jssc.start();
 		sleep(100);
 		long startTime=System.currentTimeMillis();

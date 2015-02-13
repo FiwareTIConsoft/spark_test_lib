@@ -10,7 +10,6 @@ import org.junit.After;
 import org.junit.Before;
 
 import com.tilab.ca.spark_test_lib.streaming.annotations.SparkTestConfig;
-import com.tilab.ca.spark_test_lib.streaming.interfaces.SparkTestExecutor;
 import com.tilab.ca.spark_test_lib.streaming.utils.MasterTypes;
 
 public class SparkStreamingTest {

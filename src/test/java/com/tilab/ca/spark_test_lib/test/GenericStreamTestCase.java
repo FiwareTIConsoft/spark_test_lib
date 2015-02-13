@@ -3,7 +3,6 @@ package com.tilab.ca.spark_test_lib.test;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.spark.streaming.api.java.JavaDStream;
@@ -11,7 +10,6 @@ import org.junit.Test;
 
 import com.tilab.ca.spark_test_lib.streaming.SparkStreamingTest;
 import com.tilab.ca.spark_test_lib.streaming.annotations.SparkTestConfig;
-import com.tilab.ca.spark_test_lib.streaming.interfaces.ExpectedOutputHandler;
 import com.tilab.ca.spark_test_lib.streaming.utils.MasterTypes;
 import com.tilab.ca.spark_test_lib.streaming.utils.TestStreamUtils;
 
@@ -32,15 +30,15 @@ public class GenericStreamTestCase extends SparkStreamingTest{
 	
 	@Test
 	public void singleFileStreamTest(){
-		MyOutputHandler moh=new MyOutputHandler(1);
+		MyOutputHandler mh=new MyOutputHandler(1);
 		$newTest()
-		.expectedOutputHandler(moh)
+		.expectedOutputHandler(mh)
 		.sparkStreamJob(
-				(jssc) -> {
+				(jssc,moh) -> {
 					JavaDStream<String> ds=TestStreamUtils.createMockDStream(jssc, 1, RES_PATH+"file_test_1.txt");
 					ds.map((str) -> Integer.parseInt(str.split(" ")[2])).reduce((a,b) -> a+b)
 					.foreachRDD((rdd) -> {
-						moh.saveData(rdd.collect().get(0));
+						((MyOutputHandler)moh).saveData(rdd.collect().get(0));
 						return null;
 					});
 				}
@@ -55,18 +53,18 @@ public class GenericStreamTestCase extends SparkStreamingTest{
 	
 	@Test
 	public void twoFileStreamTest(){
-		MyOutputHandler moh=new MyOutputHandler(2);
+		MyOutputHandler mh=new MyOutputHandler(2);
 		$newTest()
-		.expectedOutputHandler(moh)
+		.expectedOutputHandler(mh)
 		.sparkStreamJob(
-				(jssc) -> {
+				(jssc,moh) -> {
 					JavaDStream<String> ds=TestStreamUtils.createMockDStream(RES_PATH,jssc,1, 
 																			"file_test_1.txt",
 																			"file_test_2.txt");
 					
 					ds.map((str) -> Integer.parseInt(str.split(" ")[2])).reduce((a,b) -> a+b)
 					.foreachRDD((rdd) -> {
-						moh.saveData(rdd.collect().get(0));
+						((MyOutputHandler)moh).saveData(rdd.collect().get(0));
 						return null;
 					});
 				}
@@ -83,16 +81,16 @@ public class GenericStreamTestCase extends SparkStreamingTest{
 	
 	@Test
 	public void fileStreamFromFolderTest(){
-		MyOutputHandler moh=new MyOutputHandler(3);
+		MyOutputHandler mh=new MyOutputHandler(3);
 		$newTest()
-		.expectedOutputHandler(moh)
+		.expectedOutputHandler(mh)
 		.sparkStreamJob(
-				(jssc) -> {
+				(jssc,moh) -> {
 					JavaDStream<String> ds=TestStreamUtils.createMockDStreamFromDir(jssc, 1, RES_PATH);
 					
 					ds.map((str) -> Integer.parseInt(str.split(" ")[2])).reduce((a,b) -> a+b)
 					.foreachRDD((rdd) -> {
-						moh.saveData(rdd.collect().get(0));
+						((MyOutputHandler)moh).saveData(rdd.collect().get(0));
 						return null;
 					});
 				}
