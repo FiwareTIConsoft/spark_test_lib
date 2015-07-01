@@ -23,24 +23,34 @@ public class GenericBatchTestCase extends SparkBatchTest{
 		System.out.println("res path is "+RES_PATH);
 	}
 	
-	@Test
+        
+        @Test
 	public void singleTest(){
-		MyOutputHandler mh=new MyOutputHandler(1);
 		$newBatchTest()
-			.expectedOutputHandler(mh)
-			.sparkJob(
-					(jsc,moh) -> {
+			.sparkTest(
+					(jsc) -> {
 						JavaRDD<String> testRdd=jsc.textFile(RES_PATH+"file_test_1.txt");
-						int count=testRdd.map((str) -> Integer.parseInt(str.split(" ")[2])).reduce((a,b) -> a+b);
-						((MyOutputHandler)moh).saveData(count);
+						return testRdd.map((str) -> Integer.parseInt(str.split(" ")[2])).reduce((a,b) -> a+b);
+						
 					}
 			).test(
-				(eoh) ->{
-					List<Integer> outputList=((MyOutputHandler)eoh).getOutputList();
-					assertEquals(1,outputList.size());
-					assertEquals(5,(int) outputList.get(0));
+				(res) ->{
+					assertEquals(5,(int) res);
 				}
-			).executeTest(10000);
+			).execute();
+	}
+        
+        
+        @Test
+	public void singleVoidTest(){
+		$newBatchTest()
+			.sparkTest(
+					(jsc) -> {
+						JavaRDD<String> testRdd=jsc.textFile(RES_PATH+"file_test_1.txt");
+						int count=testRdd.map((str) -> Integer.parseInt(str.split(" ")[2])).reduce((a,b) -> a+b);
+						assertEquals(5,(int) count);
+					}
+			).execute();
 	}
 	
 	

@@ -5,7 +5,7 @@ import java.lang.annotation.Annotation;
 import org.apache.spark.SparkConf;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
-import org.apache.spark.streaming.util.ManualClock;
+import org.apache.spark.util.ManualClock;
 import org.junit.After;
 import org.junit.Before;
 
@@ -26,6 +26,7 @@ public class SparkStreamingTest {
 	public SparkStreamingTest(){}
 	
 	public SparkStreamingTest(Class<? extends SparkStreamingTest> cl) {
+                appName=cl.getName()+"App";
 		Annotation[] annotations = cl.getAnnotations();
 		for(Annotation annotation : annotations){
 			if(annotation instanceof SparkTestConfig){
@@ -64,9 +65,9 @@ public class SparkStreamingTest {
 	
 	public long getClockCurrentTime(){
 		if(!useManualClock)
-			return jssc.ssc().scheduler().clock().currentTime();
+			return jssc.ssc().scheduler().clock().getTimeMillis();
 		else
-			return mc.currentTime();
+			return mc.getTimeMillis();
 	}
 	
 	
@@ -80,13 +81,13 @@ public class SparkStreamingTest {
 		if(!useManualClock)
 			System.out.println("WARNING: Can go to next step only if manualClock option is set to true.");
 		else
-			mc.addToTime(timeMillis);
+			mc.advance(timeMillis);
 	}
 	
 	public void clockNextStep(){
 		if(!useManualClock)
 			throw new IllegalStateException("Cannot set clock time if useManualClock is false");
-		mc.addToTime(batchDurationMillis);
+		mc.advance(batchDurationMillis);
 	}
 	
 	

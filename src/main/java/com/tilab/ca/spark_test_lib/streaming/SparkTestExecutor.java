@@ -4,7 +4,7 @@ import com.tilab.ca.spark_test_lib.streaming.interfaces.ExpectedOutputHandler;
 import com.tilab.ca.spark_test_lib.streaming.interfaces.SparkStreamJob;
 import com.tilab.ca.spark_test_lib.streaming.interfaces.TestContainer;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
-import org.apache.spark.streaming.util.ManualClock;
+import org.apache.spark.util.ManualClock;
 import org.junit.Assert;
 
 public class SparkTestExecutor {
@@ -46,10 +46,10 @@ public class SparkTestExecutor {
 		sleep(100);
 		long startTime=System.currentTimeMillis();
 		if(mc!=null)
-			mc.addToTime(numBatches*batchDurationMillis);
+			mc.advance(numBatches*batchDurationMillis);
 		
 		while(!eoh.isExpectedOutputFilled() && System.currentTimeMillis()-startTime < timeoutMillis){
-			jssc.awaitTermination(50);
+			jssc.awaitTerminationOrTimeout(50);
 		}
 		long timeElapsed=System.currentTimeMillis()-startTime;
 		assertThat(timeElapsed < timeoutMillis, String.format("SparkJob timed Out after %d milliseconds", timeoutMillis));
